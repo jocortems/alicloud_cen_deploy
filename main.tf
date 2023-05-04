@@ -22,7 +22,7 @@ resource "alicloud_vswitch" "global_master" {
   provider     = alicloud.global
   vswitch_name = format("%s-masterCENRouter", var.cen_name)
   vpc_id       = var.global_vpc_id
-  cidr_block   = cidrsubnet(var.global_vpc_cidr, 5, 14)
+  cidr_block   = cidrsubnet(var.global_vpc_cidr, 5, 4)
   zone_id      = data.alicloud_cen_transit_router_available_resources.global.resources[0].master_zones[0]
 }
 
@@ -31,7 +31,7 @@ resource "alicloud_vswitch" "global_slave" {
   provider     = alicloud.global
   vswitch_name = format("%s-slaveCENRouter", var.cen_name)
   vpc_id       = var.global_vpc_id
-  cidr_block   = cidrsubnet(var.global_vpc_cidr, 5, 15)
+  cidr_block   = cidrsubnet(var.global_vpc_cidr, 5, 5)
   zone_id      = data.alicloud_cen_transit_router_available_resources.global.resources[0].slave_zones[1]
 }
 
@@ -40,7 +40,7 @@ resource "alicloud_vswitch" "china_master" {
   provider     = alicloud.china
   vswitch_name = format("%s-masterCENRouter", var.cen_name)
   vpc_id       = var.china_vpc_id
-  cidr_block   = cidrsubnet(var.china_vpc_cidr, 5, 14)
+  cidr_block   = cidrsubnet(var.china_vpc_cidr, 5, 4)
   zone_id      = data.alicloud_cen_transit_router_available_resources.china.resources[0].master_zones[0]
 }
 
@@ -49,7 +49,7 @@ resource "alicloud_vswitch" "china_slave" {
   provider     = alicloud.china
   vswitch_name = format("%s-slaveCENRouter", var.cen_name)
   vpc_id       = var.china_vpc_id
-  cidr_block   = cidrsubnet(var.china_vpc_cidr, 5, 15)
+  cidr_block   = cidrsubnet(var.china_vpc_cidr, 5, 5)
   zone_id      = data.alicloud_cen_transit_router_available_resources.china.resources[0].slave_zones[1]
 }
 

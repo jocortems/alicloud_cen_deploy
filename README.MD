@@ -69,8 +69,8 @@ module "cen" {
     source = "github.com/jocortems/alicloud_cen_deployment"
     ali_china_region                                    = var.ali_china_region                                          # Required. Region ID where the existing VPC in China is deployed 
     ali_global_region                                   = var.ali_global_region                                         # Required. Region ID where the existing VPC in Global is deployed 
-    china_vpc_cidr                                      = var.china_vpc_cidr                                            # Required. Must be /24 or shorter prefix (i.e /23) and have the last /27 subnet available for creating vSwitch to interconnect with CEN Transit Router
-    global_vpc_cidr                                     = var.global_vpc_cidr                                           # Required. Must be /24 or shorter prefix (i.e /23) and have the last /27 subnet available for creating vSwitch to interconnect with CEN Transit Router
+    china_vpc_cidr                                      = var.china_vpc_cidr                                            # Required. Prefix must be /25 or shorter and have the third /27 subnet available
+    global_vpc_cidr                                     = var.global_vpc_cidr                                           # Required. Prefix must be /25 or shorter and have the third /27 subnet available
     china_vpc_id                                        = var.china_vpc_id                                              # Required.  
     global_vpc_id                                       = var.global_vpc_id                                             # Required.
     cen_name                                            = var.cen_name                                                  # Required.

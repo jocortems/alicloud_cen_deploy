@@ -168,7 +168,7 @@ resource "alicloud_cen_bandwidth_package" "cen_bandwidth_package" {
 
 #5b. Attach the bandwidth package to the CEN
 resource "alicloud_cen_bandwidth_package_attachment" "cen_bandwidth_package_attachment" {
-  count                = var.cen_bandwidth_package_id == null || var.cen_bandwidth_package_name == null  ? 0 : 1
+  count                = var.cen_bandwidth_package_id != null || var.cen_bandwidth_package_name != null ? 1 : 0
   provider             = alicloud.global
   instance_id          = alicloud_cen_instance.cen.id
   bandwidth_package_id = var.cen_bandwidth_package_name == null ? var.cen_bandwidth_package_id : alicloud_cen_bandwidth_package.cen_bandwidth_package[0].id

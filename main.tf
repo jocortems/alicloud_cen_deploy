@@ -164,6 +164,12 @@ resource "alicloud_cen_bandwidth_package" "cen_bandwidth_package" {
   period                     = var.cen_bandwidth_package_period
   geographic_region_a_id     = "China"
   geographic_region_b_id     = var.cen_global_geo
+
+  # After the bandwidth package is created, it cannot be modified using terraform
+
+  lifecycle {
+    ignore_changes = all
+  }
 }
 
 #5b. Attach the bandwidth package to the CEN

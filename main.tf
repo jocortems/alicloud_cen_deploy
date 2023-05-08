@@ -162,8 +162,8 @@ resource "alicloud_cen_bandwidth_package" "cen_bandwidth_package" {
   cen_bandwidth_package_name = var.cen_bandwidth_package_name  
   bandwidth                  = var.cen_bandwidth_package_bandwdith
   period                     = var.cen_bandwidth_package_period
-  geographic_region_a_id     = var.cen_global_geo
-  geographic_region_b_id     = "China"
+  geographic_region_a_id     = "China"
+  geographic_region_b_id     = var.cen_global_geo
 }
 
 #5b. Attach the bandwidth package to the CEN

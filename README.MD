@@ -4,7 +4,7 @@
 
 ### Note:
 
-This Terraform module deploys an AliCloud (CEN)[https://www.alibabacloud.com/help/en/cloud-enterprise-network/latest/what-is-cloud-enterprise-network#concept-2090845] instance. It then interconnects two existing VPCs, one of which must be deployed in a region in China over the newly deployed CEN
+This Terraform module deploys an AliCloud (CEN)[https://www.alibabacloud.com/help/en/cloud-enterprise-network/latest/what-is-cloud-enterprise-network#concept-2090845] instance. It then interconnects two existing VPCs, one of which must be deployed in a region in China over the newly deployed CEN. Optionally, it connects two existing VPCs to an existing CEN; if this is the case the CEN is expected to already have two transit routers deployed and with an existing peering betweem themselves. One of the transit routers must be deployed in China
 
 This Terraform module:
 
@@ -73,14 +73,19 @@ module "cen" {
     global_vpc_cidr                                     = var.global_vpc_cidr                                           # Required. Prefix must be /25 or shorter and have the third /27 subnet available
     china_vpc_id                                        = var.china_vpc_id                                              # Required.  
     global_vpc_id                                       = var.global_vpc_id                                             # Required.
-    cen_name                                            = var.cen_name                                                  # Required.
+    cen_instance_id                                     = var.cen_instance_id                                           # Optional. Specify if using existing CEN. Conflicts with cen_name
+    cen_name                                            = var.cen_name                                                  # Optional. Specify if need to create new CEN. One of cen_instance_id or cen_name is required
+    global_vswitch_cidr_master_cen_tr                   = var.global_vswitch_cidr_master_cen_tr                         # Required. vSwitch that will be created in the master zone of the Transit Router CEN in Global Region
+    global_vswitch_cidr_slave_cen_tr                    = var.global_vswitch_cidr_slave_cen_tr                          # Required. vSwitch that will be created in the slave zone of the Transit Router CEN in Global Region
+    china_vswitch_cidr_master_cen_tr                    = var.china_vswitch_cidr_master_cen_tr                          # Required. vSwitch that will be created in the master zone of the Transit Router CEN in China Region
+    china_vswitch_cidr_slave_cen_tr                     = var.china_vswitch_cidr_slave_cen_tr                           # Required. vSwitch that will be created in the slave zone of the Transit Router CEN in China Region
     cen_global_geo                                      = var.cen_global_geo                                            # Required. Valid values are "Asia-Pacific", "North-America", "Europe" and "Australia"
     cen_bandwidth_type                                  = var.cen_bandwidth_type                                        # Optional. Defaults to DataTransfer
-    cen_bandwidth_package_name                          = var.cen_bandwidth_package_name                                # Optional. If specified creates a bandwidth package for the CEN. Conflicts with cen_bandwidth_package_id
+    cen_bandwidth_package_name                          = var.cen_bandwidth_package_name                                # Optional. If specified creates a bandwidth package for the CEN. Conflicts with cen_bandwidth_package_id. Leave blank if using existing CEN
+    cen_bandwidth_package_id                            = var.cen_bandwidth_package_id                                  # Optional. Specifies an existing bandwidth package to use with CEN. Conflicts with cen_bandwidth_package_name. Leave blank if using existing CEN
     cen_bandwidth_package_bandwdith                     = var.cen_bandwidth_package_bandwdith                           # Optional. Default 100Mbps. Only needed if cen_bandwidth_package_name is specified
     cen_bandwidth_limit                                 = var.cen_bandwidth_limit                                       # Optional. Default 100Mbps. Needed if either cen_bandwidth_package_name or cen_bandwidth_package_id are specified. Must be less than or equal to cen_bandwidth_package_bandwdith if creating a bandwidth package, or less than the existing bandwidth package bandwidth if using an existing one  
-    cen_bandwidth_package_period                        = var.cen_bandwidth_package_period                              # Optional. Default 1 month. Only needed if cen_bandwidth_package_name is specified  
-    cen_bandwidth_package_id                            = var.cen_bandwidth_package_id                                  # Optional. Specifies an existing bandwidth package to use with CEN. Conflicts with cen_bandwidth_package_name
+    cen_bandwidth_package_period                        = var.cen_bandwidth_package_period                              # Optional. Default 1 month. Only needed if cen_bandwidth_package_name is specified      
     cen_transit_router_peer_attachment_bandwidth_limit  = var.cen_transit_router_peer_attachment_bandwidth_limit        # Optional. Defaults to 100Mbps. This value is used regardless of whether a bandwidth package is used or not 
 }
 

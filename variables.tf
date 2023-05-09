@@ -28,9 +28,36 @@ variable "global_vpc_id" {
   description = "VPC ID of the Aviatrix Transit VPC in Global Region"
 }
 
+variable "cidr_block   = var.global_vswitch_cidr_master_cen_tr" {
+  type = string
+  description = "CIDR of the vSwitch in the Global Region that will connect to the master CEN transit router created in global region"
+}
+
+variable "cidr_block   = var.global_vswitch_cidr_slave_cen_tr" {
+  type = string
+  description = "CIDR of the vSwitch in the Global Region that will connect to the slave CEN transit router created in global region"
+}
+
+variable "cidr_block   = var.china_vswitch_cidr_master_cen_tr" {
+  type = string
+  description = "CIDR of the vSwitch in the China Region that will connect to the master CEN transit router created in China region"
+}
+
+variable "cidr_block   = var.china_vswitch_cidr_slave_cen_tr" {
+  type = string
+  description = "CIDR of the vSwitch in the China Region that will connect to the slave CEN transit router created in China region"
+}
+
+variable "cen_instance_id" {
+  type = string
+  description = "If using an existing CEN, specify CEN Instance ID. If not provided, a new CEN will be created"
+  default = null  
+}
+
 variable "cen_name" {
   type = string
   description = "Name assigned to the AliCloud CEN instance"  
+  default = null
 }
 
 variable "cen_bandwidth_package_name" {
@@ -90,4 +117,22 @@ variable "cen_global_geo" {
     condition     = can(regex("^(North-America|Asia-Pacific|Europe|Australia)$", var.cen_global_geo))
     error_message = "Invalid value. Allowed values are: North-America, Asia-Pacific, Europe, Australia."
   }
+}
+
+locals {
+  china_transit_router = var.cen_instance_id == null ? null : [
+    for router in data.alicloud_cen_transit_routers.default[0].transit_routers : router if router.region_id == var.ali_china_region
+  ]
+
+  global_transit_router = var.cen_instance_id == null ? null : [
+    for router in data.alicloud_cen_transit_routers.default[0].transit_routers : router if router.region_id == var.ali_global_region
+  ]
+
+  china_transit_router_attachment = var.cen_instance_id == null ? null : [
+    for att in data.alicloud_cen_transit_router_peer_attachments.china[0].transit_router_attachments : att.transit_router_attachment_id if att.peer_transit_router_id == local.global_transit_router[0].id
+  ]
+
+  global_transit_router_attachment = var.cen_instance_id == null ? null : [
+    for att in data.alicloud_cen_transit_router_peer_attachments.global[0].transit_router_attachments : att.transit_router_attachment_id if att.peer_transit_router_id == local.china_transit_router[0].id
+  ]
 }

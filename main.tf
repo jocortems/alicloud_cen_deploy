@@ -169,6 +169,7 @@ resource "alicloud_cen_bandwidth_package" "cen_bandwidth_package" {
 
   lifecycle {
     ignore_changes = all
+    prevent_destroy = true
   }
 }
 

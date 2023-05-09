@@ -245,7 +245,7 @@ resource "alicloud_cen_bandwidth_package" "cen_bandwidth_package" {
 resource "alicloud_cen_bandwidth_package_attachment" "cen_bandwidth_package_attachment" {
   count                = var.cen_bandwidth_package_id != null || var.cen_bandwidth_package_name != null ? 1 : 0
   provider             = alicloud.global
-  instance_id          = alicloud_cen_instance.cen.id
+  instance_id          = alicloud_cen_instance.cen[0].id
   bandwidth_package_id = var.cen_bandwidth_package_name == null ? var.cen_bandwidth_package_id : alicloud_cen_bandwidth_package.cen_bandwidth_package[0].id
 }
 
@@ -253,7 +253,7 @@ resource "alicloud_cen_bandwidth_package_attachment" "cen_bandwidth_package_atta
 resource "alicloud_cen_bandwidth_limit" "cen_bandwidth_limit" {
   count       = var.cen_bandwidth_package_id == null || var.cen_bandwidth_package_name == null  ? 0 : 1
   provider    = alicloud.global
-  instance_id = alicloud_cen_instance.cen.id
+  instance_id = alicloud_cen_instance.cen[0].id
   region_ids  = [
     var.ali_china_region,
     var.ali_global_region,

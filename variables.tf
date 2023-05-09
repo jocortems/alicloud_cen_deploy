@@ -120,6 +120,12 @@ variable "cen_global_geo" {
 }
 
 locals {
+  global_vpc_cidr_without_mask = element(split("/", var.china_vpc_cidr), 0)
+  global_vpc_cidr_replaced     = replace(local.global_vpc_cidr_without_mask, ".", "-")
+
+  china_vpc_cidr_without_mask = element(split("/", var.china_vpc_cidr), 0)
+  china_vpc_cidr_replaced     = replace(local.china_vpc_cidr_without_mask, ".", "-")
+
   china_transit_router = var.cen_instance_id == null ? null : [
     for router in data.alicloud_cen_transit_routers.default[0].transit_routers : router if router.region_id == var.ali_china_region
   ]

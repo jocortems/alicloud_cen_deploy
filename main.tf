@@ -112,7 +112,7 @@ resource "alicloud_cen_transit_router_vpc_attachment" "global" {
   cen_id                          = var.cen_instance_id != null ? var.cen_instance_id : alicloud_cen_instance.cen[0].id
   transit_router_id               = var.cen_instance_id != null ? local.global_transit_router[0].id : alicloud_cen_transit_router.global_tr[0].transit_router_id
   vpc_id                          = var.global_vpc_id
-  transit_router_attachment_name  = format("%s-tr-global-attachment", var.global_vpc_id)
+  transit_router_attachment_name  = format("%s-global", local.global_vpc_cidr_replaced)
 
   zone_mappings {
     vswitch_id = alicloud_vswitch.global_master.id
@@ -130,7 +130,7 @@ resource "alicloud_cen_transit_router_vpc_attachment" "china" {
   cen_id                          = var.cen_instance_id != null ? var.cen_instance_id : alicloud_cen_instance.cen[0].id
   transit_router_id               = var.cen_instance_id != null ? local.china_transit_router[0].id : alicloud_cen_transit_router.china_tr[0].transit_router_id
   vpc_id                          = var.china_vpc_id
-  transit_router_attachment_name  = format("%s-tr-china-attachment", var.china_vpc_id)
+  transit_router_attachment_name  = format("%s-china", local.china_vpc_cidr_replaced)
 
   zone_mappings {
     vswitch_id = alicloud_vswitch.china_master.id

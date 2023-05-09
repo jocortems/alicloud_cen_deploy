@@ -28,22 +28,22 @@ variable "global_vpc_id" {
   description = "VPC ID of the Aviatrix Transit VPC in Global Region"
 }
 
-variable "cidr_block   = var.global_vswitch_cidr_master_cen_tr" {
+variable "global_vswitch_cidr_master_cen_tr" {
   type = string
   description = "CIDR of the vSwitch in the Global Region that will connect to the master CEN transit router created in global region"
 }
 
-variable "cidr_block   = var.global_vswitch_cidr_slave_cen_tr" {
+variable "global_vswitch_cidr_slave_cen_tr" {
   type = string
   description = "CIDR of the vSwitch in the Global Region that will connect to the slave CEN transit router created in global region"
 }
 
-variable "cidr_block   = var.china_vswitch_cidr_master_cen_tr" {
+variable "china_vswitch_cidr_master_cen_tr" {
   type = string
   description = "CIDR of the vSwitch in the China Region that will connect to the master CEN transit router created in China region"
 }
 
-variable "cidr_block   = var.china_vswitch_cidr_slave_cen_tr" {
+variable "china_vswitch_cidr_slave_cen_tr" {
   type = string
   description = "CIDR of the vSwitch in the China Region that will connect to the slave CEN transit router created in China region"
 }

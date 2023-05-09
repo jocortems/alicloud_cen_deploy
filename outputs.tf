@@ -1,6 +1,6 @@
 output "cen_instance" {
   description = "Created CEN Instance object"
-  value = alicloud_cen_instance.cen
+  value = alicloud_cen_instance.cen[0]
 }
 
 output "cen_bandwidth_package" {
@@ -10,12 +10,12 @@ output "cen_bandwidth_package" {
 
 output "cen_global_transit_router" {
   description = "Transit router object in Global Region"
-  value = alicloud_cen_transit_router.global_tr
+  value = alicloud_cen_transit_router.global_tr[0]
 }
 
 output "cen_china_transit_router" {
   description = "Transit router object in China Region"
-  value = alicloud_cen_transit_router.china_tr
+  value = alicloud_cen_transit_router.china_tr[0]
 }
 
 output "cen_china_transit_router_route_table" {

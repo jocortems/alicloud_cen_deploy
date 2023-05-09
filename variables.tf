@@ -120,7 +120,7 @@ variable "cen_global_geo" {
 }
 
 locals {
-  global_vpc_cidr_without_mask = element(split("/", var.china_vpc_cidr), 0)
+  global_vpc_cidr_without_mask = element(split("/", var.global_vpc_cidr), 0)
   global_vpc_cidr_replaced     = replace(local.global_vpc_cidr_without_mask, ".", "-")
 
   china_vpc_cidr_without_mask = element(split("/", var.china_vpc_cidr), 0)

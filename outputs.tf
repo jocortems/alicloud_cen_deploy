@@ -1,6 +1,6 @@
 output "cen_instance" {
   description = "Created CEN Instance object"
-  value = var.cen_instance_id != null ? var.cen_instance_id : alicloud_cen_instance.cen[0]
+  value = var.cen_instance_id != null ? null : alicloud_cen_instance.cen[0]
 }
 
 output "cen_bandwidth_package" {

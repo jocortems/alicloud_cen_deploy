@@ -383,12 +383,3 @@ resource "alicloud_route_entry" "china_to_global_existing" {
   nexthop_type          = "Attachment" # Transit Router
   nexthop_id            = alicloud_cen_transit_router_vpc_attachment.china.transit_router_attachment_id  
 }
-
-output "china_transit_router" {
-  value = local.china_transit_router
-}
-
-
-output "global_transit_router" {
-  value = local.global_transit_router
-}

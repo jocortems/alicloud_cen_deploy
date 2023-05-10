@@ -25,9 +25,10 @@ data "alicloud_cen_transit_routers" "global" {
 }
 
 data "alicloud_cen_transit_router_peer_attachments" "global" {
+  provider          = alicloud.global
   count             = var.cen_instance_id != null ? 1 : 0
   cen_id            = var.cen_instance_id
-  transit_router_id = local.global_transit_router[0].id
+  transit_router_id = local.global_transit_router[0].transit_router_id
 }
 
 # 1b. Retrieve China Master and Slave Zones
@@ -49,9 +50,10 @@ data "alicloud_cen_transit_routers" "china" {
 }
 
 data "alicloud_cen_transit_router_peer_attachments" "china" {
+  provider          = alicloud.china
   count             = var.cen_instance_id != null ? 1 : 0
   cen_id            = var.cen_instance_id
-  transit_router_id = local.china_transit_router[0].id
+  transit_router_id = local.china_transit_router[0].transit_router_id
 }
 
 # 1c. Create vSwitch for Transit Router in Global Master Zone
@@ -380,4 +382,13 @@ resource "alicloud_route_entry" "china_to_global_existing" {
   destination_cidrblock = var.global_vpc_cidr
   nexthop_type          = "Attachment" # Transit Router
   nexthop_id            = alicloud_cen_transit_router_vpc_attachment.china.transit_router_attachment_id  
+}
+
+output "china_transit_router" {
+  value = local.china_transit_router
+}
+
+
+output "global_transit_router" {
+  value = local.global_transit_router
 }

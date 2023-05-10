@@ -31,6 +31,12 @@ data "alicloud_cen_transit_router_peer_attachments" "global" {
   transit_router_id = local.global_transit_router[0].transit_router_id
 }
 
+data "alicloud_cen_transit_router_route_tables" "global_tr" {
+  count      = var.cen_instance_id != null ? 1 : 0
+  provider          = alicloud.global
+  transit_router_id = local.global_transit_router[0].transit_router_id
+}
+
 # 1b. Retrieve China Master and Slave Zones
 data "alicloud_cen_transit_router_available_resources" "china_new" {
   count      = var.cen_instance_id != null ? 0 : 1
@@ -53,6 +59,12 @@ data "alicloud_cen_transit_router_peer_attachments" "china" {
   provider          = alicloud.china
   count             = var.cen_instance_id != null ? 1 : 0
   cen_id            = var.cen_instance_id
+  transit_router_id = local.china_transit_router[0].transit_router_id
+}
+
+data "alicloud_cen_transit_router_route_tables" "china_tr" {
+  count             = var.cen_instance_id != null ? 1 : 0
+  provider          = alicloud.china
   transit_router_id = local.china_transit_router[0].transit_router_id
 }
 
@@ -168,73 +180,34 @@ resource "alicloud_cen_transit_router_route_table" "china_rtb" {
 
 # 3c. Create Intra-Region Route Table Association in Global Region
 resource "alicloud_cen_transit_router_route_table_association" "global_rtb_association_new" {
-  #count                         = var.cen_instance_id != null ? 0 : 1
   provider                      = alicloud.global
   depends_on                    = [alicloud_cen_transit_router_peer_attachment.global_to_china]
   transit_router_route_table_id = alicloud_cen_transit_router_route_table.global_rtb.transit_router_route_table_id
   transit_router_attachment_id  = alicloud_cen_transit_router_vpc_attachment.global.transit_router_attachment_id  
 }
-/*
-resource "alicloud_cen_transit_router_route_table_association" "global_rtb_association_existing" {
-  count                         = var.cen_instance_id != null ? 1 : 0
-  provider                      = alicloud.global  
-  transit_router_route_table_id = alicloud_cen_transit_router_route_table.global_rtb.transit_router_route_table_id
-  transit_router_attachment_id  = alicloud_cen_transit_router_vpc_attachment.global.transit_router_attachment_id  
-}
-*/
 
 # 3d. Create Intra-Region Route Table Association in China Region
-resource "alicloud_cen_transit_router_route_table_association" "china_rtb_association_new" {
-  #count                         = var.cen_instance_id != null ? 0 : 1
+resource "alicloud_cen_transit_router_route_table_association" "china_rtb_association_new" {  
   provider                      = alicloud.china
   depends_on                    = [alicloud_cen_transit_router_peer_attachment.global_to_china]
   transit_router_route_table_id = alicloud_cen_transit_router_route_table.china_rtb.transit_router_route_table_id
   transit_router_attachment_id  = alicloud_cen_transit_router_vpc_attachment.china.transit_router_attachment_id
 }
-/*
-resource "alicloud_cen_transit_router_route_table_association" "china_rtb_association_existing" {
-  count                         = var.cen_instance_id != null ? 1 : 0
-  provider                      = alicloud.china
-  transit_router_route_table_id = alicloud_cen_transit_router_route_table.china_rtb.transit_router_route_table_id
-  transit_router_attachment_id  = alicloud_cen_transit_router_vpc_attachment.china.transit_router_attachment_id
-}
-*/
 # 3e. Create Intra-Region Route Table Propagation in Global Region
-resource "alicloud_cen_transit_router_route_table_propagation" "global_rtb_propagation_new" {
-  #count                         = var.cen_instance_id != null ? 0 : 1
+resource "alicloud_cen_transit_router_route_table_propagation" "global_rtb_propagation_new" { 
   provider                      = alicloud.global
   depends_on                    = [alicloud_cen_transit_router_peer_attachment.global_to_china]
   transit_router_route_table_id = alicloud_cen_transit_router_route_table.global_rtb.transit_router_route_table_id
   transit_router_attachment_id  = alicloud_cen_transit_router_vpc_attachment.global.transit_router_attachment_id
 }
-
-/*
-resource "alicloud_cen_transit_router_route_table_propagation" "global_rtb_propagation_existing" {
-  count                         = var.cen_instance_id != null ? 1 : 0
-  provider                      = alicloud.global
-  transit_router_route_table_id = alicloud_cen_transit_router_route_table.global_rtb.transit_router_route_table_id
-  transit_router_attachment_id  = alicloud_cen_transit_router_vpc_attachment.global.transit_router_attachment_id
-}
-*/
 
 # 3f. Create Intra-Region Route Table Propagation in China Region
 resource "alicloud_cen_transit_router_route_table_propagation" "china_rtb_propagation_new" {
-  #count                         = var.cen_instance_id != null ? 0 : 1
   provider                      = alicloud.china
   depends_on                    = [alicloud_cen_transit_router_peer_attachment.global_to_china]
   transit_router_route_table_id = alicloud_cen_transit_router_route_table.china_rtb.transit_router_route_table_id
   transit_router_attachment_id  = alicloud_cen_transit_router_vpc_attachment.china.transit_router_attachment_id
 }
-
-
-/*
-resource "alicloud_cen_transit_router_route_table_propagation" "china_rtb_propagation_existing" {
-  count                         = var.cen_instance_id != null ? 1 : 0
-  provider                      = alicloud.china
-  transit_router_route_table_id = alicloud_cen_transit_router_route_table.china_rtb.transit_router_route_table_id
-  transit_router_attachment_id  = alicloud_cen_transit_router_vpc_attachment.china.transit_router_attachment_id
-}
-*/
 
 
 # 4. Allocate Bandwidth to the CEN
@@ -312,23 +285,24 @@ resource "alicloud_cen_transit_router_route_table_association" "global_xregion_r
   provider                      = alicloud.global
   depends_on                    = [alicloud_cen_transit_router_vpc_attachment.global]
   transit_router_route_table_id = alicloud_cen_transit_router_route_table.global_rtb.transit_router_route_table_id
-  transit_router_attachment_id  = var.cen_instance_id != null ? local.global_transit_router_attachment[0] : alicloud_cen_transit_router_peer_attachment.global_to_china[0].transit_router_attachment_id
+  transit_router_attachment_id  = alicloud_cen_transit_router_peer_attachment.global_to_china[0].transit_router_attachment_id
 }
 
 
 # 5c. Create Cross-Region Route Table Association in China Region
 resource "alicloud_cen_transit_router_route_table_association" "china_xregion_rtb_association" {
+  count                         = var.cen_instance_id != null ? 0 : 1
   provider                      = alicloud.china
   depends_on                    = [alicloud_cen_transit_router_vpc_attachment.china]
   transit_router_route_table_id = alicloud_cen_transit_router_route_table.china_rtb.transit_router_route_table_id
-  transit_router_attachment_id  = var.cen_instance_id != null ? local.china_transit_router_attachment[0] : alicloud_cen_transit_router_peer_attachment.global_to_china[0].transit_router_attachment_id
+  transit_router_attachment_id  = alicloud_cen_transit_router_peer_attachment.global_to_china[0].transit_router_attachment_id
 }
 
 # 5d. Create Cross-Region Route Table Propagation in Global Region
 resource "alicloud_cen_transit_router_route_table_propagation" "global_xregion_rtb_propagation" {
   provider                      = alicloud.global
   depends_on                    = [alicloud_cen_transit_router_vpc_attachment.global]
-  transit_router_route_table_id = alicloud_cen_transit_router_route_table.global_rtb.transit_router_route_table_id
+  transit_router_route_table_id = var.cen_instance_id == null ? alicloud_cen_transit_router_route_table.global_rtb.transit_router_route_table_id : local.global_rtb_existing.transit_router_route_table_id
   transit_router_attachment_id  = var.cen_instance_id != null ? local.global_transit_router_attachment[0] : alicloud_cen_transit_router_peer_attachment.global_to_china[0].transit_router_attachment_id
 }
 
@@ -336,7 +310,7 @@ resource "alicloud_cen_transit_router_route_table_propagation" "global_xregion_r
 resource "alicloud_cen_transit_router_route_table_propagation" "china_xregion_rtb_propagation" {
   provider                      = alicloud.china
   depends_on                    = [alicloud_cen_transit_router_vpc_attachment.china]
-  transit_router_route_table_id = alicloud_cen_transit_router_route_table.china_rtb.transit_router_route_table_id
+  transit_router_route_table_id = var.cen_instance_id == null ? alicloud_cen_transit_router_route_table.china_rtb.transit_router_route_table_id : local.china_rtb_existing.transit_router_route_table_id
   transit_router_attachment_id  = var.cen_instance_id != null ? local.china_transit_router_attachment[0] : alicloud_cen_transit_router_peer_attachment.global_to_china[0].transit_router_attachment_id
 }
 

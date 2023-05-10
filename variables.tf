@@ -114,9 +114,10 @@ variable "cen_global_geo" {
   type = string
   description = "Name of the Geo where the global transit VPC connecting to CEN is deployed. Valid values are Nort-America, Asia-Pacific, Europe and Australia"
   validation {
-    condition     = can(regex("^(North-America|Asia-Pacific|Europe|Australia)$", var.cen_global_geo))
+    condition     = or(var.cen_global_geo == null, can(regex("^(North-America|Asia-Pacific|Europe|Australia)$", var.cen_global_geo)))
     error_message = "Invalid value. Allowed values are: North-America, Asia-Pacific, Europe, Australia."
   }
+  default = null
 }
 
 locals {

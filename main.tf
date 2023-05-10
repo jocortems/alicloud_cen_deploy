@@ -93,7 +93,7 @@ resource "alicloud_vswitch" "china_slave" {
   vpc_id       = var.china_vpc_id
   cidr_block   = var.china_vswitch_cidr_slave_cen_tr
   #cidr_block   = cidrsubnet(var.china_vpc_cidr, 5, 5)
-  zone_id      = var.cen_instance_id != null ? data.alicloud_cen_transit_router_available_resources.china_existing[0].resources[0].master_zones[1] : data.alicloud_cen_transit_router_available_resources.china_new[0].resources[0].slave_zones[1]
+  zone_id      = var.cen_instance_id != null ? data.alicloud_cen_transit_router_available_resources.china_existing[0].resources[0].slave_zones[1] : data.alicloud_cen_transit_router_available_resources.china_new[0].resources[0].slave_zones[1]
 }
 
 

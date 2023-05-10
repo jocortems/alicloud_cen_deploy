@@ -142,14 +142,4 @@ locals {
   global_transit_router_attachment = var.cen_instance_id == null ? null : [
     for att in data.alicloud_cen_transit_router_peer_attachments.global[0].attachments : att.transit_router_attachment_id if att.peer_transit_router_id == local.china_transit_router[0].transit_router_id
   ]
-
-  global_rtb_existing = [
-    for table in data.alicloud_cen_transit_router_route_tables.global_tr[0].tables :
-    table if length(regexall("-globalRT",table.transit_router_route_table_name)) > 0
-  ]
-
-  china_rtb_existing = [
-    for table in data.alicloud_cen_transit_router_route_tables.china_tr[0].tables :
-    table if length(regexall("-chinaRT",table.transit_router_route_table_name)) > 0
-  ]
 }

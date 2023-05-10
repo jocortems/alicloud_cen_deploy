@@ -18,7 +18,8 @@ data "alicloud_cen_transit_router_available_resources" "global_existing" {
   provider   = alicloud.global  
 }
 
-data "alicloud_cen_transit_routers" "default" {
+data "alicloud_cen_transit_routers" "global" {
+  provider   = alicloud.global
   count      = var.cen_instance_id != null ? 1 : 0
   cen_id     = var.cen_instance_id
 }
@@ -39,6 +40,12 @@ data "alicloud_cen_transit_router_available_resources" "china_new" {
 data "alicloud_cen_transit_router_available_resources" "china_existing" {
   count      = var.cen_instance_id != null ? 1 : 0
   provider   = alicloud.china
+}
+
+data "alicloud_cen_transit_routers" "china" {
+  provider   = alicloud.china
+  count      = var.cen_instance_id != null ? 1 : 0
+  cen_id     = var.cen_instance_id
 }
 
 data "alicloud_cen_transit_router_peer_attachments" "china" {

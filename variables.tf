@@ -128,11 +128,11 @@ locals {
   china_vpc_cidr_replaced     = replace(local.china_vpc_cidr_without_mask, ".", "-")
 
   china_transit_router = var.cen_instance_id == null ? null : [
-    for router in data.alicloud_cen_transit_routers.default[0].transit_routers : router if router.region_id == var.ali_china_region
+    for router in data.alicloud_cen_transit_routers.china[0].transit_routers : router
   ]
 
   global_transit_router = var.cen_instance_id == null ? null : [
-    for router in data.alicloud_cen_transit_routers.default[0].transit_routers : router if router.region_id == var.ali_global_region
+    for router in data.alicloud_cen_transit_routers.global[0].transit_routers : router
   ]
 
   china_transit_router_attachment = var.cen_instance_id == null ? null : [

@@ -67,8 +67,8 @@ module "cen" {
       alicloud.global = alicloud.global
     }
     source = "github.com/jocortems/alicloud_cen_deployment"
-    ali_china_region                                    = var.ali_china_region                                          # Optional. Required if creating new CEN instance (cen_name is provided). Region ID where the existing VPC in China is deployed 
-    ali_global_region                                   = var.ali_global_region                                         # Optional. Required if creating new CEN instance (cen_name is provided). Region ID where the existing VPC in Global is deployed 
+    ali_china_region                                    = var.ali_china_region                                          # Required. Region ID where the existing VPC in China is deployed 
+    ali_global_region                                   = var.ali_global_region                                         # Required. Region ID where the existing VPC in Global is deployed 
     china_vpc_cidr                                      = var.china_vpc_cidr                                            # Required. Prefix must be /25 or shorter and have the third /27 subnet available
     global_vpc_cidr                                     = var.global_vpc_cidr                                           # Required. Prefix must be /25 or shorter and have the third /27 subnet available
     china_vpc_id                                        = var.china_vpc_id                                              # Required.  

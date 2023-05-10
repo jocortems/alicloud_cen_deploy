@@ -119,7 +119,7 @@ resource "alicloud_cen_transit_router" "china_tr" {
 resource "alicloud_cen_transit_router_vpc_attachment" "global" {
   provider                        = alicloud.global
   cen_id                          = var.cen_instance_id != null ? var.cen_instance_id : alicloud_cen_instance.cen[0].id
-  transit_router_id               = var.cen_instance_id != null ? local.global_transit_router[0].id : alicloud_cen_transit_router.global_tr[0].transit_router_id
+  transit_router_id               = var.cen_instance_id != null ? local.global_transit_router[0].transit_router_id : alicloud_cen_transit_router.global_tr[0].transit_router_id
   vpc_id                          = var.global_vpc_id
   transit_router_attachment_name  = format("%s-global", local.global_vpc_cidr_replaced)
 
@@ -137,7 +137,7 @@ resource "alicloud_cen_transit_router_vpc_attachment" "global" {
 resource "alicloud_cen_transit_router_vpc_attachment" "china" {
   provider                        = alicloud.china
   cen_id                          = var.cen_instance_id != null ? var.cen_instance_id : alicloud_cen_instance.cen[0].id
-  transit_router_id               = var.cen_instance_id != null ? local.china_transit_router[0].id : alicloud_cen_transit_router.china_tr[0].transit_router_id
+  transit_router_id               = var.cen_instance_id != null ? local.china_transit_router[0].transit_router_id : alicloud_cen_transit_router.china_tr[0].transit_router_id
   vpc_id                          = var.china_vpc_id
   transit_router_attachment_name  = format("%s-china", local.china_vpc_cidr_replaced)
 
@@ -155,14 +155,14 @@ resource "alicloud_cen_transit_router_vpc_attachment" "china" {
 # 3a. Create Transit Router Route Table in Global Region
 resource "alicloud_cen_transit_router_route_table" "global_rtb" {
   provider                        = alicloud.global
-  transit_router_id               = var.cen_instance_id != null ? local.global_transit_router[0].id : alicloud_cen_transit_router.global_tr[0].transit_router_id
+  transit_router_id               = var.cen_instance_id != null ? local.global_transit_router[0].transit_router_id : alicloud_cen_transit_router.global_tr[0].transit_router_id
   transit_router_route_table_name = format("%s-globalRT", var.global_vpc_id)  
 }
 
 # 3b. Create Transit Router Route Table in China Region
 resource "alicloud_cen_transit_router_route_table" "china_rtb" {
   provider                        = alicloud.china
-  transit_router_id               = var.cen_instance_id != null ? local.china_transit_router[0].id : alicloud_cen_transit_router.china_tr[0].transit_router_id
+  transit_router_id               = var.cen_instance_id != null ? local.china_transit_router[0].transit_router_id : alicloud_cen_transit_router.china_tr[0].transit_router_id
   transit_router_route_table_name = format("%s-chinaRT", var.china_vpc_id)  
 }
 

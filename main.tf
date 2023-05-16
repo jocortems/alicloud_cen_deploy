@@ -65,7 +65,7 @@ data "alicloud_cen_transit_router_peer_attachments" "china" {
 data "alicloud_cen_transit_router_route_table_associations" "china_transit_router_peering" {
   provider                            = alicloud.china
   count                               = var.cen_instance_id != null ? 1 : 0
-  transit_router_attachment_table_id  = local.china_transit_router_attachment[0]
+  transit_router_attachment_id  = local.china_transit_router_attachment[0]
 }
 
 # 1c. Create vSwitch for Transit Router in Global Master Zone

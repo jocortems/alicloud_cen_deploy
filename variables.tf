@@ -142,4 +142,12 @@ locals {
   global_transit_router_attachment = var.cen_instance_id == null ? null : [
     for att in data.alicloud_cen_transit_router_peer_attachments.global[0].attachments : att.transit_router_attachment_id if att.peer_transit_router_id == local.china_transit_router[0].transit_router_id
   ]
+
+  china_transit_router_route_table = var.cen_instance_id == null ? null : [
+    for rt in data.alicloud_cen_transit_router_route_table_associations.china_transit_router_peering[0].associations : rt.transit_router_route_table_id if rt.transit_router_attachment_id == local.china_transit_router_attachment[0]
+  ]
+
+  global_transit_router_route_table = var.cen_instance_id == null ? null : [
+    for rt in data.alicloud_cen_transit_router_route_table_associations.global_transit_router_peering[0].associations : rt.transit_router_route_table_id if rt.transit_router_attachment_id == local.global_transit_router_attachment[0]
+  ]
 }

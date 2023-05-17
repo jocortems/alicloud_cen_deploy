@@ -149,7 +149,7 @@ locals {
     ]
   ])
 
-  global_transit_router_route_table = var.cen_instance_id == null ? null : flatten([
+  global_associated_route_table_ids = var.cen_instance_id == null ? null : flatten([
     for ds in data.alicloud_cen_transit_router_route_table_associations.global_transit_router_peering : [
       for association in ds.associations : association.transit_router_route_table_id if association.transit_router_attachment_id == local.global_transit_router_attachment_id
     ]

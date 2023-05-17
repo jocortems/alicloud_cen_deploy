@@ -31,9 +31,15 @@ data "alicloud_cen_transit_router_peer_attachments" "global" {
   transit_router_id = local.global_transit_router[0].transit_router_id
 }
 
-data "alicloud_cen_transit_router_route_table_associations" "global_transit_router_peering" {
+data "alicloud_cen_transit_router_route_tables" "global_rts" {
   provider                      = alicloud.global
   count                         = var.cen_instance_id != null ? 1 : 0
+  transit_router_id             = local.global_transit_router[0].transit_router_id
+}
+
+data "alicloud_cen_transit_router_route_table_associations" "global_transit_router_peering" {
+  provider                      = alicloud.global
+  count                         = var.cen_instance_id != null ? length(data.alicloud_cen_transit_router_route_tables.global_rts) : 0
   transit_router_attachment_id  = local.global_transit_router_attachment[0]
 }
 
@@ -62,9 +68,15 @@ data "alicloud_cen_transit_router_peer_attachments" "china" {
   transit_router_id = local.china_transit_router[0].transit_router_id
 }
 
+data "alicloud_cen_transit_router_route_tables" "china_rts" {
+  provider                      = alicloud.china
+  count                         = var.cen_instance_id != null ? 1 : 0
+  transit_router_id             = local.china_transit_router[0].transit_router_id
+}
+
 data "alicloud_cen_transit_router_route_table_associations" "china_transit_router_peering" {
   provider                            = alicloud.china
-  count                               = var.cen_instance_id != null ? 1 : 0
+  count                               = var.cen_instance_id != null ? length(data.alicloud_cen_transit_router_route_tables.china_rts) : 0
   transit_router_attachment_id  = local.china_transit_router_attachment[0]
 }
 

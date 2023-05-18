@@ -4,7 +4,7 @@
 
 ### Note:
 
-This Terraform module deploys an AliCloud (CEN)[https://www.alibabacloud.com/help/en/cloud-enterprise-network/latest/what-is-cloud-enterprise-network#concept-2090845] instance. It then interconnects two existing VPCs, one of which must be deployed in a region in China over the newly deployed CEN. Optionally, it connects two existing VPCs to an existing CEN; if this is the case the CEN is expected to already have two transit routers deployed and with an existing peering betweem themselves. One of the transit routers must be deployed in China
+This Terraform module deploys an AliCloud (CEN)[https://www.alibabacloud.com/help/en/cloud-enterprise-network/latest/what-is-cloud-enterprise-network#concept-2090845] instance. It then interconnects two existing VPCs, one of which must be deployed in a region in China over the newly deployed CEN. Optionally, it connects two existing VPCs to an existing CEN; if this is the case the CEN is expected to already have two transit routers deployed and with an existing transit peering attachment betweem themselves. One of the transit routers must be deployed in China. It is also expected that a Route Table is already associated with the Transit Peering attachment
 
 This Terraform module:
 
@@ -97,7 +97,3 @@ module "cen" {
 terraform init
 terraform apply --var-file=<terraform.tfvars>
 ````
-
-## **Disclaimer**:
-
-The material embodied in this software/code is provided to you "as-is" and without warranty of any kind, express, implied or otherwise, including without limitation, any warranty of fitness for a particular purpose. In no event shall the Aviatrix Inc. be liable to you or anyone else for any direct, special, incidental, indirect or consequential damages of any kind, or any damages whatsoever, including without limitation, loss of profit, loss of use, savings or revenue, or the claims of third parties, whether or not Aviatrix Inc. has been advised of the possibility of such loss, however caused and on any theory of liability, arising out of or in connection with the possession, use or performance of this software/code.

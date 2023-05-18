@@ -143,19 +143,15 @@ locals {
     for att in data.alicloud_cen_transit_router_peer_attachments.global[0].attachments : att.transit_router_attachment_id if att.peer_transit_router_id == local.china_transit_router[0].transit_router_id
   ]
 
-  china_associated_route_table_ids = ["rtb-2ze0q0q0q0q0q0q0q0q0"]
-  global_associated_route_table_ids = ["rtb-2ze0q0q0q0q0q0q0q0q1"]
-/*
   china_associated_route_table_ids = var.cen_instance_id == null ? null : flatten([
     for ds in data.alicloud_cen_transit_router_route_table_associations.china_transit_router_peering : [
-      for association in ds.associations : association.transit_router_route_table_id if association.transit_router_attachment_id == local.china_transit_router_attachment_id
-    ]
+      for association in ds.associations : ds.transit_router_route_table_id if association.transit_router_attachment_id == local.china_transit_router_attachment[0]
+    ]    
   ])
 
   global_associated_route_table_ids = var.cen_instance_id == null ? null : flatten([
     for ds in data.alicloud_cen_transit_router_route_table_associations.global_transit_router_peering : [
-      for association in ds.associations : association.transit_router_route_table_id if association.transit_router_attachment_id == local.global_transit_router_attachment_id
-    ]
+      for association in ds.associations : ds.transit_router_route_table_id if association.transit_router_attachment_id == local.global_transit_router_attachment[0]
+    ]    
   ])
-*/
 }
